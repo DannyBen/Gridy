@@ -6,20 +6,10 @@
     by Danny Ben Shitrit (Sector-Seven) 2015
     db@sector-seven.net
     http://sector-seven.net
+
+    Download Binary: http://sector-seven.net/software/gridy
     
 ======================================================================
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-  NONINFRINGEMENT OF THIRD PARTY RIGHTS. 
-  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-======================================================================
-
 
 Introduction
 -----------------------------
@@ -37,7 +27,7 @@ Introduction
   - Set any window to be Always on Top
   - Resize any window to a predefined size of your choice
   - Minimize all windows but the active one
-  
+
 
 Getting Started
 -----------------------------
