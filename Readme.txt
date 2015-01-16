@@ -7,10 +7,6 @@
     db@sector-seven.net
     http://sector-seven.net
     
-    This work is licensed under a 
-    Creative Commons Attribution 3.0 Unported License.
-    http://creativecommons.org/licenses/by/3.0/
-    
 ======================================================================
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
@@ -73,6 +69,8 @@ Revision History
     Added  : Ability to use F keys for storing windows positions
     Changed: Modifier for windows preset from Win to Win+Alt
     Changed: Ability to customize windows preset modifier keys
+    Changed: License from Creative Commons Attribution 3.0 Unported 
+             License to MIT.
 
   2011 10 11 - 0.50
     Changed: Source released as creative commons, time to have a round version 
