@@ -1,6 +1,6 @@
 ======================================================================
 
-    Gridy 0.60
+    Gridy 0.61
     Snap Windows to Grid
 
     by Danny Ben Shitrit (Sector-Seven) 2015
