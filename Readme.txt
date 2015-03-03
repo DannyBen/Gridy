@@ -55,6 +55,9 @@ Technical Notes
 
 Revision History
 -----------------------------
+  2015 03 03 - 0.61
+    Added  : Ability to resize non resizable windows
+
   2015 01 16 - 0.60
     Added  : Ability to use F keys for storing windows positions
     Changed: Modifier for windows preset from Win to Win+Alt

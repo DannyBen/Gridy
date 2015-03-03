@@ -12,7 +12,7 @@
 ;   http://creativecommons.org/licenses/by/3.0/
 ; 
 ;=====================================================================
-VersionString = 0.60
+VersionString = 0.61
 NameString    = Gridy
 AuthorString  = Danny Ben Shitrit (Sector-Seven)
 
@@ -46,6 +46,7 @@ IniRead GridSizeX,         %IniFile%, General, GridSizeX, 32
 IniRead GridSizeY,         %IniFile%, General, GridSizeY, 32
 IniRead GridSizes,         %IniFile%, General, GridSizes, % "4,8,16,32,64,128"
 IniRead SnapNonResizables, %IniFile%, General, SnapNonResizables, 0
+IniRead SizeNonResizables, %IniFile%, General, SizeNonResizables, 0
 IniRead ShowWelcomeTip,    %IniFile%, General, ShowWelcomeTip, 1
 IniRead HomeW,             %IniFile%, General, HomeW, 320
 IniRead HomeH,             %IniFile%, General, HomeH, 320
@@ -567,9 +568,11 @@ StorePreset( presetId ) {
 ; Returns true if window is resizable
 
 IsWindowResizable( WinID ) {
+  Global SizeNonResizables
+
   WinGet Style, Style, ahk_id %WinID%
-  
-  If( Style & 0x40000 )   ; Window is resizable
+
+  If( Style & 0x40000 or SizeNonResizables )
     Return true
   Else
     Return false
