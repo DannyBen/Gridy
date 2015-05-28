@@ -631,7 +631,7 @@ Help:
     Gui Add, Text, xp   y+10 , Store size of Active Window
     Gui Add, Text, xp   y+2 , Resize active window to stored size
     Gui Add, Text, xp   y+10 , Store size and position into slot 1-9
-    Gui Add, Text, xp   y+2 , Retore size and position from slot 1-9
+    Gui Add, Text, xp   y+2 , Restore size and position from slot 1-9
     Gui Add, Text, xp   y+10 , Minimize all windows except active one
     Gui Add, Text, xp   y+10 , Toggle Transparency for Active Window
     Gui Add, Text, xp   y+2 , Toggle Alt-Tab Icon for Active Window
