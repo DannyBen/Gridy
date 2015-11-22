@@ -7,12 +7,8 @@
 ;   http://sector-seven.net/
 ;   db@sector-seven.net
 ;
-;   This work is licensed under the 
-;   Creative Commons Attribution 3.0 Unported License.
-;   http://creativecommons.org/licenses/by/3.0/
-; 
 ;=====================================================================
-VersionString = 0.61
+VersionString = 0.70
 NameString    = Gridy
 AuthorString  = Danny Ben Shitrit (Sector-Seven)
 
@@ -607,16 +603,16 @@ Help:
     Gui Add, Text, right w180 x20 y14 , %NameString% %VersionString%
     Gui Add, Text, right wp xp  y+20 , %MyModifierKey%
     Gui Add, Text, right wp xp  y+2 , %MyDisableKey%
-    Gui Add, Text, right wp xp  y+2 , Win+Arrow Keys
-    Gui Add, Text, right wp xp  y+2 , Shift+Win+Arrow Keys
-    Gui Add, Text, right wp xp  y+10 , Win+Shift+Home
-    Gui Add, Text, right wp xp  y+2 , Win+Home
-    Gui Add, Text, right wp xp  y+10 , Win+Ctrl+%PresetKeySet%1-9
-    Gui Add, Text, right wp xp  y+2 , Win+%PresetKeySet%1-9
-    Gui Add, Text, right wp xp  y+10 , Win+PgDn
-    Gui Add, Text, right wp xp  y+10 , Win+F10
-    Gui Add, Text, right wp xp  y+2 , Win+F11
-    Gui Add, Text, right wp xp  y+2 , Win+F12
+    Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(MoveLeftKey) . "Arrow Keys"
+    Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(SizeLeftKey) . "Arrow Keys"
+    Gui Add, Text, right wp xp  y+10 , % GetFriendlyKeyName(StoreWinSizeKey, True)
+    Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(RestoreWinSizeKey, True)
+    Gui Add, Text, right wp xp  y+10 , % GetFriendlyKeyName(PresetStoreKey) . PresetKeySet . "1-9"
+    Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(PresetRestoreKey) . PresetKeySet . "1-9"
+    Gui Add, Text, right wp xp  y+10 , % GetFriendlyKeyName(MinimizeAllButMeKey, True)
+    Gui Add, Text, right wp xp  y+10 , % GetFriendlyKeyName(ToggleTransparencyKey, True)
+    Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(ToggleAltTabIconKey, True)
+    Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(ToggleAlwaysOnTopKey, True)
     Gui Add, Text, right wp xp  y+10 , Right-Click on Tray Icon 
     If( !DisableExitKey )
       Gui Add, Text, right wp xp  y+2 , Win+Esc
@@ -841,3 +837,23 @@ GetMonitorUnderMouse() {
   ; If we are here, something went wrong, use primary monitor
   Return 1  
 }
+
+;---------------------------------------------------------------------
+; Service: Convert autohotkey key string to human readable string
+;---------------------------------------------------------------------
+GetFriendlyKeyName(KeyString, Full=false) {
+  If(Full)
+    Result := KeyString
+  Else
+    Result := RegExReplace(KeyString, "[^+#!\^]")
+  Result := StrReplace(Result, "+", "Shift+")
+  Result := StrReplace(Result, "#", "Win+")
+  Result := StrReplace(Result, "!", "Alt+")
+  Result := StrReplace(Result, "^", "Ctrl+")
+  Return Result
+}
+
+
+; For development
+; F1::Gosub Help 
+; ^F5::Reload

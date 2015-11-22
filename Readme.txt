@@ -1,6 +1,6 @@
 ======================================================================
 
-    Gridy 0.61
+    Gridy 0.70
     Snap Windows to Grid
 
     by Danny Ben Shitrit (Sector-Seven) 2015
@@ -55,6 +55,11 @@ Technical Notes
 
 Revision History
 -----------------------------
+  2015 11 22 - 0.70
+    Fixed  : Help dialog reported one incorrect keyboard shortcut
+             (Thanks Garrick)
+    Changed: Help dialog will now consider all the custom keyboard shortcuts
+
   2015 03 03 - 0.61
     Added  : Ability to resize non resizable windows
 
