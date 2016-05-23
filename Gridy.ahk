@@ -25,6 +25,7 @@ AuthorString  = Danny Ben Shitrit (Sector-Seven)
 ;---------------------------------------------------------------------
 #SingleInstance force
 CoordMode Mouse, Window
+
 SetWorkingDir %A_ScriptDir%
 SetBatchLines -1
 
@@ -172,6 +173,10 @@ Loop 12 {
   Hotkey %PresetRestoreKey%%PresetKeySet%%A_Index%, RestorePresetKey
   Hotkey %PresetStoreKey%%PresetKeySet%%A_Index%, StorePresetKey
 }
+
+; Invisible border width
+SideBorder := GetSideBorder()
+TopBorder  := GetTopBorder()
 
 ;--- END OF AUTO-EXECUTING SECTION -----------------------------------
 Return
@@ -395,6 +400,7 @@ Return
 ; presses the modifer again - this will trigger StartResize, which will in 
 ; turn, call us.
 WatchCursor:
+  Global SideBorder, TopBorder
   
   ;MouseGetPos MX, MY, MWinID, MControl, 1
   WinGetPos WX, WY, WWidth, WHeight, ahk_id %MWinID%
@@ -408,10 +414,18 @@ WatchCursor:
   }
   
   ; Calculate new dimensions, assuming we will snap
+  WWidth  -= 2*SideBorder
+  WHeight -= TopBorder
+  ; WX      += SideBorder
+  ; WY      += TopBorder
   NewWWidth  := Round( WWidth  / GridSizeX ) * GridSizeX
   NewWHeight := Round( WHeight / GridSizeY ) * GridSizeY
   NewWX      := Round( WX      / GridSizeX ) * GridSizeX
   NewWY      := Round( WY      / GridSizeY ) * GridSizeY
+  NewWX -= SideBorder
+  ; NewWY -= TopBorder
+  NewWWidth  += 2*SideBorder
+  NewWHeight += TopBorder
   
   ; If the mouse button was released, it is time to see if we need to snap or 
   ; not
@@ -454,25 +468,31 @@ Return
 ;
 ;---------------------------------------------------------------------
 MoveWindow( XOffset, YOffset ) {
-  Global GridSizeX, GridSizeY
+  Global GridSizeX, GridSizeY, SideBorder, TopBorder
   
   WinGetPos WX, WY, WWidth, WHeight, A
-  
+
   WinGet MinMax, MinMax, A
   if ( MinMax <> 0 )
     Return
-  
+
+  WX += SideBorder
+  WY += TopBorder
+
   NewWX      := Round( WX / GridSizeX ) * GridSizeX + ( GridSizeX*XOffset )
   NewWY      := Round( WY / GridSizeY ) * GridSizeY + ( GridSizeY*YOffset )
   NewWWidth  := WWidth
   NewWHeight := WHeight
-  
+
+  NewWX -= SideBorder
+  ; NewWY -= TopBorder
+
   HandleEdge( NewWX, NewWY, NewWWidth, NewWHeight )
   WinMove A,,%NewWX%, %NewWY%, %NewWWidth%, %NewWHeight%
 }
 
 SizeWindow( XOffset="", YOffset="" ) {
-  Global GridSizeX, GridSizeY, HomeW, HomeH
+  Global GridSizeX, GridSizeY, HomeW, HomeH, SideBorder, TopBorder
   
   WinGet WinID, ID, A
   
@@ -492,8 +512,12 @@ SizeWindow( XOffset="", YOffset="" ) {
 
   ; Resize by one unit
   Else {
+    WWidth  -= 2*SideBorder
+    WHeight -= TopBorder
     NewWWidth  := Round( WWidth  / GridSizeX ) * GridSizeX + ( GridSizeX*XOffset )
     NewWHeight := Round( WHeight / GridSizeY ) * GridSizeY + ( GridSizeY*YOffset )
+    NewWWidth  += 2*SideBorder
+    NewWHeight += TopBorder
   }
 
   HandleEdge( NewWX, NewWY, NewWWidth, NewWHeight, 12 )
@@ -558,11 +582,8 @@ StorePreset( presetId ) {
 ;
 ;
 ;---------------------------------------------------------------------
-;---------------------------------------------------------------------
-; IsWindowResizable 
-;---------------------------------------------------------------------
-; Returns true if window is resizable
 
+; Returns true if window is resizable
 IsWindowResizable( WinID ) {
   Global SizeNonResizables
 
@@ -573,6 +594,16 @@ IsWindowResizable( WinID ) {
   Else
     Return false
 
+}
+
+GetSideBorder() {
+  SysGet out, 32
+  Return out
+}
+
+GetTopBorder() {
+  SysGet out, 33
+  return out
 }
 
 ;---------------------------------------------------------------------
@@ -804,14 +835,14 @@ HandleEdge( ByRef MyX, ByRef MyY, ByRef MyW, ByRef MyH, Flag=15 ) {
   }
   
   ; Left
-  Exceed := MonitorWorkAreaLeft - MyX
+  Exceed := MonitorWorkAreaLeft - MyX - SideBorder
   If( Exceed > 0 ) {
     If( EdgeBehavior == "Shrink" and WindowIsResizable ) {
       MyW -= Exceed
       MyX := MonitorWorkAreaLeft
     }
     Else ; "Block"
-      MyX := MonitorWorkAreaLeft
+      MyX := MonitorWorkAreaLeft - SideBorder
   }
 }
 
@@ -856,4 +887,4 @@ GetFriendlyKeyName(KeyString, Full=false) {
 
 ; For development
 ; F1::Gosub Help 
-; ^F5::Reload
+^F5::Reload
