@@ -358,7 +358,6 @@ Return
 ; Now, we work in two stages: First, do some basic filtering to see if we need
 ; to do further actions, and if so, start a timer, to allow us to constantly
 ; monitor the mouse movement, while the user moves or resizes a window.
-; Once
 
 ;---------------------------------------------------------------------
 ; Start Resize - Capture Initial Click 
@@ -376,7 +375,7 @@ StartResize:
   ; Get mouse position, and window under mouse cursor
   MouseGetPos OMX, OMY, MWinID, OMControl, 1              
   
-  ; Get window dimentions and ID
+  ; Get window dimensions and ID
   WinGetPos OWX, OWY, OWWidth, OWHeight, ahk_id %MWinID%    
 
   ; Check if window is resizable
@@ -393,7 +392,7 @@ Return
 ; WatchCursor - Timer Routine 
 ;---------------------------------------------------------------------
 ; Here we already know that the modifier was triggered.
-; If any of the window's dimenstions was changed, it means that the user
+; If any of the window's dimensions were changed, it means that the user
 ; resized the window - we will then snap it to the grid, as soon as the 
 ; mouse button is unpressed.
 ; When this happens, we will turn off the timer, and wait until someone 
