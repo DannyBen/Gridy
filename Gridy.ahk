@@ -886,4 +886,4 @@ GetFriendlyKeyName(KeyString, Full=false) {
 
 ; For development
 ; F1::Gosub Help 
-^F5::Reload
+; ^F5::Reload
