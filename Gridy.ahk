@@ -654,7 +654,7 @@ Help:
     ; Buttons
     Gui Add, Button, x20  yp+40 w228 gOpenIni, Open INI File
     Gui Add, Button, x+4 yp w228 gOpenReadme, Open Readme File
-    Gui Add, Button, x20  y+4 w460 gOpenSite, Visit Sector-Seven.net
+    Gui Add, Button, x20  y+4 w460 gOpenSite, Visit Sector-Seven.com
     
   }
   Gui Show, w500, %NameString% Help
@@ -670,7 +670,7 @@ OpenReadme:
 Return
 
 OpenSite:
-  Run http://sector-seven.net
+  Run https://sector-seven.com
 Return
 
 GuiClose:

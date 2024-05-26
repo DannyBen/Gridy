@@ -4,10 +4,10 @@
     Snap Windows to Grid
 
     by Danny Ben Shitrit (Sector-Seven) 2006-2024
-    db@sector-seven.net
-    http://sector-seven.net
+    db@sector-seven.com
+    https://sector-seven.com
 
-    Download Binary: http://sector-seven.net/software/gridy
+    Download Binary: https://sector-seven.com/software/gridy
     
 ======================================================================
 
