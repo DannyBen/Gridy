@@ -3,12 +3,12 @@
 ;   Gridy
 ;   Snap Windows to Grid
 ;
-;   Danny Ben Shitrit (Sector-Seven) 2015
-;   http://sector-seven.net/
-;   db@sector-seven.net
+;   Danny Ben Shitrit 2006-2024
+;   https://sector-seven.com/
+;   db@sector-seven.com
 ;
 ;=====================================================================
-VersionString = 0.70
+VersionString = 0.71
 NameString    = Gridy
 AuthorString  = Danny Ben Shitrit (Sector-Seven)
 
@@ -135,16 +135,16 @@ Menu GridSizeX  , Check, %GridSizeX%
 Menu GridSizeY  , Check, %GridSizeY%
 Menu Transparency, Check, %TransLevel%
 Menu EdgeBehavior, Check, %EdgeBehavior%
-If( !DisableExitKey ) 
+If ( !DisableExitKey ) 
   Hotkey #ESC, Exit
 
 FirstCallToHelp := true 
 
 ; Startup Traytip ----------------------------------------------------
-If( ShowWelcomeTip ) {
+If ( ShowWelcomeTip ) {
   TrayTip %NameString% Tray Menu, Double-Click for Help`nRight-Click for Options,, 1
   SetTimer RemoveTrayTip, 8000
-  If( ShowWelcomeTip == 1 ) 
+  If ( ShowWelcomeTip == 1 ) 
     IniWrite 0, %IniFile%, General, ShowWelcomeTip
 }
 
@@ -265,7 +265,7 @@ Return
 ; Store / Restore Position and/or Size
 ;---------------------------------------------------------------------
 RestoreWinSize:
-  If( HomeH <> "" ) and ( HomeW <> "" )
+  If ( HomeH <> "" ) and ( HomeW <> "" )
     SizeWindow()
 Return
 
@@ -319,7 +319,7 @@ Return
 ToggleTransparency:
   WinID := WinExist( "A" )
   WinGet WinTrans, Transparent, ahk_id %WinID%
-  If( WinTrans <> TransLevel ) {
+  If ( WinTrans <> TransLevel ) {
     WinSet Transparent, OFF, ahk_id %WinID%
     WinSet Transparent, %TransLevel%, ahk_id %WinID%
   }
@@ -376,7 +376,7 @@ StartResize:
   ; Check if window is resizable
   WindowIsResizable := IsWindowResizable( MWinID )
   
-  If( !WindowIsResizable and !SnapNonResizables )
+  If ( !WindowIsResizable and !SnapNonResizables )
     Return
     
   SetTimer, WatchCursor, 10
@@ -397,7 +397,7 @@ WatchCursor:
   
   ;MouseGetPos MX, MY, MWinID, MControl, 1
   WinGetPos WX, WY, WWidth, WHeight, ahk_id %MWinID%
-  
+
   ; This condition makes Gridy ignore windows that instantly closed, like 
   ; menus and dialogs that had their X button clicked
   IfWinNotExist ahk_id %MWinID%
@@ -415,16 +415,16 @@ WatchCursor:
   ; If the mouse button was released, it is time to see if we need to snap or 
   ; not
   GetKeyState LeftButton, LButton
-  If( LeftButton = "U" ) {
+  If ( LeftButton = "U" ) {
     SetTimer WatchCursor, Off 
     
     ; If there is a control under the mouse, abort the snapping
     ; Allow snapping only when the control is a status bar
-    ;If( OMControl <> "" and !InStr( OMControl, "statusbar" ) )
+    ;If ( OMControl <> "" and !InStr( OMControl, "statusbar" ) )
     ; Return    
     
     ; If nothing was changed, return
-    If( OWX == WX and OWY == WY and OWWidth == WWidth and OWHeight == WHeight ) 
+    If ( OWX == WX and OWY == WY and OWWidth == WWidth and OWHeight == WHeight ) 
       Return
     
     ; Check if window is maximized, at the last possible moment in order
@@ -433,9 +433,9 @@ WatchCursor:
     
     ; Finally, all filters are ok, now check that the window is not 
     ; maximized, and snap it.
-    If( MinMax = 0 ) {
+    If ( MinMax = 0 ) {
       HandleEdge( NewWX, NewWY, NewWWidth, NewWHeight )
-      If( !WindowIsResizable ) 
+      If ( !WindowIsResizable ) 
         WinMove ahk_id %MWinID%,, NewWX, NewWY
       Else 
         WinMove ahk_id %MWinID%,, NewWX, NewWY, NewWWidth, NewWHeight     
@@ -455,12 +455,19 @@ Return
 MoveWindow( XOffset, YOffset ) {
   Global GridSizeX, GridSizeY
   
-  WinGetPos WX, WY, WWidth, WHeight, A
-  
   WinGet MinMax, MinMax, A
+
+  ; If window is maximized, restore it
+  If ( MinMax = 1 ) {
+    WinRestore A
+    WinGet MinMax, MinMax, A
+  }
+
   if ( MinMax <> 0 )
     Return
-  
+
+  WinGetPos WX, WY, WWidth, WHeight, A
+
   NewWX      := Round( WX / GridSizeX ) * GridSizeX + ( GridSizeX*XOffset )
   NewWY      := Round( WY / GridSizeY ) * GridSizeY + ( GridSizeY*YOffset )
   NewWWidth  := WWidth
@@ -474,9 +481,18 @@ SizeWindow( XOffset="", YOffset="" ) {
   Global GridSizeX, GridSizeY, HomeW, HomeH
   
   WinGet WinID, ID, A
-  
   WinGet MinMax, MinMax, A
-  If( MinMax <> 0 or !IsWindowResizable( WinID ) )
+
+  If ( !IsWindowResizable( WinID ) )
+    Return
+
+  ; If window is maximized, restore it
+  If ( MinMax = 1 ) {
+    WinRestore A
+    WinGet MinMax, MinMax, A
+  }
+
+  If ( MinMax <> 0 )
     Return
     
   WinGetPos WX, WY, WWidth, WHeight, A
@@ -484,7 +500,7 @@ SizeWindow( XOffset="", YOffset="" ) {
   NewWY := WY
 
   ; Resize to Home size
-  If( XOffset = "" or YOffset = "" ) {
+  If ( XOffset = "" or YOffset = "" ) {
     NewWWidth  := HomeW
     NewWHeight := HomeH
   }
@@ -503,7 +519,7 @@ StoreWindowSize() {
   Global HomeW, HomeH, IniFile
   
   WinGet MinMax, MinMax, A
-  If( MinMax <> 0 )
+  If ( MinMax <> 0 )
     Return
   
   WinGetPos ,,, HomeW, HomeH, A
@@ -514,23 +530,23 @@ StoreWindowSize() {
 RestorePreset( presetId ) {
   Global
   
-  If( presetId < 1 or presetId > 12 )
+  If ( presetId < 1 or presetId > 12 )
     Return
     
   ; Extract X,Y,W,H for that preset from the INI key PositionN
   StringSplit PresetVector, Position%presetId%, `,
   
   ; If the height or width are invalid
-  If( PresetVector3 <= 0 or PresetVector4 <= 0 )
+  If ( PresetVector3 <= 0 or PresetVector4 <= 0 )
     Return
     
   WinGet WinID, ID, A
   WinGet MinMax, MinMax, A
 
-  If( MinMax <> 0 )
+  If ( MinMax <> 0 )
     Return
     
-  If( IsWindowResizable( WinID ) )
+  If ( IsWindowResizable( WinID ) )
     WinMove A,,%PresetVector1%,%PresetVector2%,%PresetVector3%,%PresetVector4%
   Else
     WinMove A,,%PresetVector1%,%PresetVector2%
@@ -541,7 +557,7 @@ StorePreset( presetId ) {
   
   WinGet MinMax, MinMax, A
 
-  If( MinMax <> 0 or presetId < 1 or presetId > 12 )
+  If ( MinMax <> 0 or presetId < 1 or presetId > 12 )
     Return
 
   WinGetPos X,Y,W,H,A
@@ -567,7 +583,7 @@ IsWindowResizable( WinID ) {
 
   WinGet Style, Style, ahk_id %WinID%
 
-  If( Style & 0x40000 or SizeNonResizables )
+  If ( Style & 0x40000 or SizeNonResizables )
     Return true
   Else
     Return false
@@ -578,7 +594,7 @@ IsWindowResizable( WinID ) {
 ; Help
 ;---------------------------------------------------------------------
 Help:
-  If( FirstCallToHelp ) {
+  If ( FirstCallToHelp ) {
     FirstCallToHelp := false
     MyModifierKey := ModifierKey
     MyDisableKey  := DisableKey
@@ -613,7 +629,7 @@ Help:
     Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(ToggleAltTabIconKey, True)
     Gui Add, Text, right wp xp  y+2 , % GetFriendlyKeyName(ToggleAlwaysOnTopKey, True)
     Gui Add, Text, right wp xp  y+10 , Right-Click on Tray Icon 
-    If( !DisableExitKey )
+    If ( !DisableExitKey )
       Gui Add, Text, right wp xp  y+2 , Win+Esc
     
     ; Description
@@ -632,7 +648,7 @@ Help:
     Gui Add, Text, xp   y+2 , Toggle Alt-Tab Icon for Active Window
     Gui Add, Text, xp   y+2 , Toggle Always On Top for Active Window
     Gui Add, Text, xp   y+10 , Configure common settings
-    If( !DisableExitKey )
+    If ( !DisableExitKey )
       Gui Add, Text, xp   y+2 , Exit %NameString%
       
     ; Buttons
@@ -755,7 +771,7 @@ HandleEdge( ByRef MyX, ByRef MyY, ByRef MyW, ByRef MyH, Flag=15 ) {
   
   SysGet MonitorWorkArea, MonitorWorkArea, %MonitorNumber%
   
-  If( EdgeBehavior == "Ignore" )
+  If ( EdgeBehavior == "Ignore" )
     Return
     
   WinGet WinID, ID, A
@@ -763,38 +779,38 @@ HandleEdge( ByRef MyX, ByRef MyY, ByRef MyW, ByRef MyH, Flag=15 ) {
   
   ; Bottom
   Exceed := (MyY + MyH) - MonitorWorkAreaBottom
-  If( Exceed > 0 ) {
-    If( EdgeBehavior == "Shrink" and WindowIsResizable ) {
-      If( Flag & 8 )
+  If ( Exceed > 0 ) {
+    If ( EdgeBehavior == "Shrink" and WindowIsResizable ) {
+      If ( Flag & 8 )
         MyH -= Exceed
     }
     Else { ; "Block"
-      If( Flag & 2 )
+      If ( Flag & 2 )
         MyY -= Exceed
-      If( Flag & 8 )
+      If ( Flag & 8 )
         MyH := MonitorWorkAreaBottom - MyY
     }
   }
 
   ; Right
   Exceed := (MyX + MyW) - MonitorWorkAreaRight
-  If( Exceed > 0 ) {
-    If( EdgeBehavior == "Shrink" and WindowIsResizable ) {
-      If( Flag & 4 )
+  If ( Exceed > 0 ) {
+    If ( EdgeBehavior == "Shrink" and WindowIsResizable ) {
+      If ( Flag & 4 )
         MyW -= Exceed
     }
     Else { ; "Block"
-      If( Flag & 1 )
+      If ( Flag & 1 )
         MyX -= Exceed
-      If( Flag & 4 )
+      If ( Flag & 4 )
         MyW := MonitorWorkAreaRight - MyX
     }
   }
   
   ; Top
   Exceed := MonitorWorkAreaTop - MyY
-  If( Exceed > 0 ) {
-    If( EdgeBehavior == "Shrink" and WindowIsResizable ) {
+  If ( Exceed > 0 ) {
+    If ( EdgeBehavior == "Shrink" and WindowIsResizable ) {
       MyH -= Exceed
       MyY := MonitorWorkAreaTop
     }
@@ -804,8 +820,8 @@ HandleEdge( ByRef MyX, ByRef MyY, ByRef MyW, ByRef MyH, Flag=15 ) {
   
   ; Left
   Exceed := MonitorWorkAreaLeft - MyX
-  If( Exceed > 0 ) {
-    If( EdgeBehavior == "Shrink" and WindowIsResizable ) {
+  If ( Exceed > 0 ) {
+    If ( EdgeBehavior == "Shrink" and WindowIsResizable ) {
       MyW -= Exceed
       MyX := MonitorWorkAreaLeft
     }
@@ -819,7 +835,7 @@ HandleEdge( ByRef MyX, ByRef MyY, ByRef MyW, ByRef MyH, Flag=15 ) {
 ;---------------------------------------------------------------------
 GetMonitorUnderMouse() {
   SysGet MonitorCount, MonitorCount
-  If( MonitorCount == 1 ) 
+  If ( MonitorCount == 1 ) 
     Return 1
     
   ;WinGetPos WX, WY, WW, WH, A    ; Alternative way, using the corner of the window
@@ -829,7 +845,7 @@ GetMonitorUnderMouse() {
     
   Loop %MonitorCount% {
     SysGet Mon, MonitorWorkArea, %A_Index%
-    If( WX >= MonLeft and WX < MonRight and WY >= MonTop and WY < MonBottom )
+    If ( WX >= MonLeft and WX < MonRight and WY >= MonTop and WY < MonBottom )
       Return A_Index
   }
   
@@ -841,7 +857,7 @@ GetMonitorUnderMouse() {
 ; Service: Convert autohotkey key string to human readable string
 ;---------------------------------------------------------------------
 GetFriendlyKeyName(KeyString, Full=false) {
-  If(Full)
+  If (Full)
     Result := KeyString
   Else
     Result := RegExReplace(KeyString, "[^+#!\^]")
