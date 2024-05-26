@@ -55,6 +55,10 @@ Technical Notes
 
 Revision History
 -----------------------------
+  2024 05 26 - 0.71
+    Changed: Maximized windows can now be resized/moved by keyboard (they will
+             be restored first)
+
   2015 11 22 - 0.70
     Fixed  : Help dialog reported one incorrect keyboard shortcut
              (Thanks Garrick)
