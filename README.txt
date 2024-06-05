@@ -1,6 +1,6 @@
 ======================================================================
 
-    Gridy 0.71
+    Gridy 0.72
     Snap Windows to Grid
 
     by Danny Ben Shitrit (Sector-Seven) 2006-2024
@@ -55,6 +55,9 @@ Technical Notes
 
 Revision History
 -----------------------------
+  2024 06 05 - 0.72
+    Changed: Maximized windows can now be restored to one of the preset sizes
+
   2024 05 26 - 0.71
     Changed: Maximized windows can now be resized/moved by keyboard (they will
              be restored first)

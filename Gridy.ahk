@@ -8,7 +8,7 @@
 ;   db@sector-seven.com
 ;
 ;=====================================================================
-VersionString = 0.71
+VersionString = 0.72
 NameString    = Gridy
 AuthorString  = Danny Ben Shitrit (Sector-Seven)
 
@@ -542,6 +542,12 @@ RestorePreset( presetId ) {
     
   WinGet WinID, ID, A
   WinGet MinMax, MinMax, A
+
+  ; If window is maximized, restore it
+  If ( MinMax = 1 ) {
+    WinRestore A
+    WinGet MinMax, MinMax, A
+  }
 
   If ( MinMax <> 0 )
     Return
